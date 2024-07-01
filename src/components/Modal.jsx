@@ -10,16 +10,12 @@ function Modal({ open, onClose, children }) {
     }else{
       dialog.current.close();
     }
-  
-    // return () => {
-    //   second
-    // }
-  }, [open])  //dependence 'depend on component' execute again when it update.
+  }, [open])  //dependence (here its a value) 'depend on component' execute again when it update.
   
 
   return createPortal(
     <dialog className="modal" ref={dialog} onClose={onClose}>
-      {children}
+      {open ? children : null }
     </dialog>,
     document.getElementById('modal')
   );
