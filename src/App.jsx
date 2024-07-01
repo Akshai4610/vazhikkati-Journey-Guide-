@@ -9,7 +9,7 @@ import { sortPlacesByDistance } from './loc.js';
 
 // Retrieve stored IDs from localStorage and ensure it's an array
 const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
-const storedPlaces = Array.isArray(storedIds)
+const storedPlaces = Array.isArray(storedIds) //Array.isArray() is an in-built function to check the 'array'
   ? storedIds.map((id) =>
       AVAILABLE_PLACES.find((place) => place.id === id)
     ).filter(Boolean)  // Ensure no undefined values
@@ -17,8 +17,8 @@ const storedPlaces = Array.isArray(storedIds)
 
 
 function App() {
-  const modal = useRef();
   const selectedPlace = useRef();
+  const [modalOpen, setModelOpen] = useState(false); //declarative way to managing the dialog box
   const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
@@ -36,12 +36,12 @@ function App() {
   }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModelOpen(true)
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setModelOpen(false)
   }
 
   function handleSelectPlace(id) {
@@ -66,7 +66,7 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    setModelOpen(false)
 
     const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
     localStorage.setItem(
@@ -77,7 +77,7 @@ function App() {
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={modalOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
